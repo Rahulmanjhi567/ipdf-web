@@ -1,0 +1,197 @@
+:root{
+  --bg:#0b1020;
+  --card:#121a33;
+  --card2:#0f1730;
+  --text:#e7ecff;
+  --muted:rgba(231,236,255,.7);
+  --border:rgba(231,236,255,.12);
+  --accent:#4da3ff;
+}
+
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+  background:var(--bg);
+  color:var(--text);
+}
+
+.topbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  padding:14px 16px;
+  border-bottom:1px solid var(--border);
+  position:sticky;
+  top:0;
+  background:rgba(11,16,32,.85);
+  backdrop-filter:blur(10px);
+  z-index:10;
+}
+
+.brand{display:flex;align-items:baseline;gap:12px}
+.logo{
+  font-weight:800;
+  letter-spacing:.5px;
+  padding:6px 10px;
+  border:1px solid var(--border);
+  border-radius:12px;
+  background:rgba(18,26,51,.6);
+}
+.tag{color:var(--muted);font-size:13px}
+
+.actions{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.btn{
+  border:1px solid var(--border);
+  background:rgba(18,26,51,.65);
+  color:var(--text);
+  padding:10px 14px;
+  border-radius:14px;
+  cursor:pointer;
+  font-weight:600;
+}
+.btn:hover{border-color:rgba(77,163,255,.6)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.primary{
+  background:linear-gradient(180deg, rgba(77,163,255,.25), rgba(77,163,255,.1));
+  border-color:rgba(77,163,255,.35);
+}
+
+.layout{
+  display:grid;
+  grid-template-columns:320px 1fr;
+  gap:14px;
+  padding:14px;
+}
+
+.sidebar{display:flex;flex-direction:column;gap:14px}
+.panel{
+  border:1px solid var(--border);
+  background:rgba(18,26,51,.55);
+  border-radius:18px;
+  overflow:hidden;
+}
+.panel-title{
+  padding:12px 14px;
+  border-bottom:1px solid var(--border);
+  font-weight:800;
+}
+.file-list{
+  padding:10px;
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+}
+.file-list.empty{color:var(--muted);padding:14px}
+.file-item{
+  display:flex;
+  gap:10px;
+  padding:12px;
+  border:1px solid var(--border);
+  border-radius:16px;
+  cursor:pointer;
+  background:rgba(15,23,48,.6);
+}
+.file-item:hover{border-color:rgba(77,163,255,.55)}
+.file-item.active{
+  border-color:rgba(77,163,255,.85);
+  background:rgba(77,163,255,.08);
+}
+.file-name{
+  font-weight:800;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  max-width:220px;
+}
+.file-meta{font-size:12px;color:var(--muted)}
+
+.tool-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  padding:12px;
+}
+.tool{
+  border:1px solid var(--border);
+  background:rgba(15,23,48,.45);
+  color:var(--muted);
+  padding:12px;
+  border-radius:14px;
+}
+.note{padding:0 12px 12px;color:var(--muted);font-size:12px}
+
+.viewer{
+  border:1px solid var(--border);
+  background:rgba(18,26,51,.45);
+  border-radius:18px;
+  overflow:hidden;
+  min-height:72vh;
+  display:flex;
+  flex-direction:column;
+}
+
+.viewer-toolbar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  padding:10px 12px;
+  border-bottom:1px solid var(--border);
+  background:rgba(15,23,48,.5);
+  flex-wrap:wrap;
+}
+
+.viewer-left,.viewer-right{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.icon-btn{
+  width:40px;height:40px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:rgba(18,26,51,.55);
+  color:var(--text);
+  cursor:pointer;
+  font-weight:800;
+}
+.icon-btn:disabled{opacity:.45;cursor:not-allowed}
+
+.sep{width:1px;height:26px;background:var(--border);display:inline-block;margin:0 6px}
+.label{font-size:13px;color:var(--muted)}
+.muted{color:var(--muted);font-weight:700}
+
+.page-input{
+  width:72px;
+  padding:8px 10px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:rgba(11,16,32,.5);
+  color:var(--text);
+}
+
+.viewer-host{
+  padding:14px;
+  overflow:auto;
+  display:flex;
+  justify-content:center;
+  align-items:flex-start;
+  min-height:60vh;
+}
+
+.empty-state{
+  width:100%;
+  text-align:center;
+  padding:30px 10px;
+  color:var(--muted);
+  border:1px dashed var(--border);
+  border-radius:16px;
+  background:rgba(11,16,32,.25);
+}
+
+@media (max-width: 900px){
+  .layout{grid-template-columns:1fr}
+  .file-name{max-width:65vw}
+}
