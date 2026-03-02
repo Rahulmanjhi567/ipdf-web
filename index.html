@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>iPDF Web</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="logo">iPDF</div>
+      <div class="tag">Web tools (Preview • Merge • Download)</div>
+    </div>
+
+    <div class="actions">
+      <button id="btnUpload" class="btn">Upload PDFs</button>
+      <input id="fileInput" type="file" accept="application/pdf" multiple hidden />
+
+      <button id="btnMerge" class="btn primary" disabled>Merge & Download</button>
+      <button id="btnClear" class="btn" disabled>Clear</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <aside class="sidebar">
+      <div class="panel">
+        <div class="panel-title">Files (<span id="fileCount">0</span>)</div>
+        <div id="fileList" class="file-list empty">No PDFs selected</div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-title">Tools (next updates)</div>
+        <div class="tool-grid">
+          <button class="tool" disabled>Split</button>
+          <button class="tool" disabled>Remove Pages</button>
+          <button class="tool" disabled>Extract Pages</button>
+          <button class="tool" disabled>Organize</button>
+          <button class="tool" disabled>Compress</button>
+          <button class="tool" disabled>Repair</button>
+          <button class="tool" disabled>OCR</button>
+          <button class="tool" disabled>JPG → PDF</button>
+          <button class="tool" disabled>Word → PDF</button>
+          <button class="tool" disabled>PDF → JPG</button>
+          <button class="tool" disabled>Rotate</button>
+          <button class="tool" disabled>Watermark</button>
+          <button class="tool" disabled>Page Numbers</button>
+          <button class="tool" disabled>Protect</button>
+          <button class="tool" disabled>Unlock*</button>
+          <button class="tool" disabled>AI (Chat/Summary)</button>
+        </div>
+        <div class="note">
+          *Unlock will be supported only when you know the password (no bypass).
+        </div>
+      </div>
+    </aside>
+
+    <section class="viewer">
+      <div class="viewer-toolbar">
+        <div class="viewer-left">
+          <button id="btnPrev" class="icon-btn" disabled>◀</button>
+          <button id="btnNext" class="icon-btn" disabled>▶</button>
+
+          <span class="sep"></span>
+
+          <span class="label">Page</span>
+          <input id="pageInput" class="page-input" type="number" min="1" value="1" disabled />
+          <span id="pageCount" class="muted">/ 0</span>
+        </div>
+
+        <div class="viewer-right">
+          <button id="btnZoomOut" class="icon-btn" disabled>−</button>
+          <span id="zoomLabel" class="muted">100%</span>
+          <button id="btnZoomIn" class="icon-btn" disabled>+</button>
+
+          <span class="sep"></span>
+
+          <button id="btnDownloadCurrent" class="btn" disabled>Download Selected</button>
+        </div>
+      </div>
+
+      <div id="viewerHost" class="viewer-host">
+        <div class="empty-state">
+          Upload PDFs → select a file → preview here
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- PDF.js + Worker (same version) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+  <!-- pdf-lib -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+
+  <script src="app.js"></script>
+</body>
+</html>
