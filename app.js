@@ -27,7 +27,6 @@ const btnZoomOut = document.getElementById("btnZoomOut");
 const zoomLabel = document.getElementById("zoomLabel");
 
 // ---------- STATE ----------
-// each file: { name, size, originalBytes: Uint8Array }
 let files = [];
 let selectedIndex = -1;
 
@@ -43,7 +42,6 @@ fileInput.addEventListener("change", async (e) => {
   const picked = Array.from(e.target.files || []);
   if (!picked.length) return;
 
-  // ✅ Append mode (बार-बार add होंगे)
   for (const f of picked) {
     const ab = await f.arrayBuffer();
     files.push({
@@ -59,7 +57,6 @@ fileInput.addEventListener("change", async (e) => {
   enableTopButtons();
   await openSelectedPdf();
 
-  // ✅ same file again select allow
   fileInput.value = "";
 });
 
@@ -85,8 +82,7 @@ btnMerge.onclick = async () => {
     const merged = await PDFDocument.create();
 
     for (const f of files) {
-      // ✅ always pass fresh copy (no detached buffer)
-      const src = await PDFDocument.load(new Uint8Array(f.originalBytes));
+      const src = await PDFDocument.load(new Uint8Array(f.originalBytes)); // fresh copy
       const pages = await merged.copyPages(src, src.getPageIndices());
       pages.forEach((p) => merged.addPage(p));
     }
@@ -114,13 +110,15 @@ async function openSelectedPdf(password = null) {
 
   try {
     const task = pdfjsLib.getDocument({
-      data: new Uint8Array(f.originalBytes), // ✅ fresh copy
+      data: new Uint8Array(f.originalBytes), // fresh copy
       password: password || undefined,
     });
 
     pdfDoc = await task.promise;
     totalPages = pdfDoc.numPages;
     currentPage = 1;
+
+    // ✅ reset zoom so first render auto-fits to mobile width
     zoom = 1;
 
     btnPrev.disabled = false;
@@ -143,8 +141,7 @@ async function openSelectedPdf(password = null) {
       return;
     }
 
-    viewerHost.innerHTML =
-      "<div class='empty-state'>Could not open PDF.</div>";
+    viewerHost.innerHTML = "<div class='empty-state'>Could not open PDF.</div>";
   }
 }
 
@@ -152,14 +149,31 @@ async function renderPage(num) {
   if (!pdfDoc) return;
 
   const page = await pdfDoc.getPage(num);
-  const viewport = page.getViewport({ scale: zoom });
+
+  // ✅ Auto-fit for mobile: when zoom==1, fit to container width
+  const hostWidth = Math.max(320, viewerHost.clientWidth - 20);
+  const baseViewport = page.getViewport({ scale: 1.0 });
+
+  let effectiveScale = zoom;
+  if (zoom === 1) {
+    effectiveScale = hostWidth / baseViewport.width;
+    effectiveScale = Math.min(Math.max(effectiveScale, 0.6), 2.0); // clamp
+    zoom = effectiveScale; // save
+  }
+
+  const viewport = page.getViewport({ scale: effectiveScale });
 
   viewerHost.innerHTML = "";
   const canvas = document.createElement("canvas");
   const ctx = canvas.getContext("2d");
 
-  canvas.width = Math.floor(viewport.width);
-  canvas.height = Math.floor(viewport.height);
+  // ✅ HiDPI sharp rendering
+  const dpr = window.devicePixelRatio || 1;
+  canvas.width = Math.floor(viewport.width * dpr);
+  canvas.height = Math.floor(viewport.height * dpr);
+  canvas.style.width = Math.floor(viewport.width) + "px";
+  canvas.style.height = Math.floor(viewport.height) + "px";
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
   viewerHost.appendChild(canvas);
 
@@ -171,6 +185,9 @@ async function renderPage(num) {
 
   btnPrev.disabled = num <= 1;
   btnNext.disabled = num >= totalPages;
+
+  // ✅ mobile friendly scroll top
+  viewerHost.scrollTop = 0;
 }
 
 btnZoomIn.onclick = async () => {
@@ -204,6 +221,14 @@ pageInput.onchange = async () => {
     await renderPage(currentPage);
   }
 };
+
+// ✅ If user rotates phone / resizes, re-render current page to fit
+window.addEventListener("resize", () => {
+  if (!pdfDoc) return;
+  // reset zoom to auto-fit again
+  zoom = 1;
+  renderPage(currentPage);
+});
 
 // ---------- UI HELPERS ----------
 function renderFileList() {
