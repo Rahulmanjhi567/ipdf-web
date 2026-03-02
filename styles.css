@@ -195,3 +195,53 @@ body{
   .layout{grid-template-columns:1fr}
   .file-name{max-width:65vw}
 }
+/* ===== Mobile Fixes ===== */
+@media (max-width: 600px) {
+  .topbar{
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .actions{
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .btn{
+    padding: 10px 12px;
+    border-radius: 12px;
+    flex: 1;
+  }
+
+  .actions .btn{
+    min-width: 0;
+  }
+
+  .viewer-toolbar{
+    gap: 8px;
+  }
+
+  .viewer-left, .viewer-right{
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .page-input{
+    width: 64px;
+  }
+
+  .viewer-host{
+    padding: 10px;
+  }
+
+  /* canvas ko mobile me center + responsive */
+  .viewer-host canvas{
+    max-width: 100%;
+    height: auto !important;
+  }
+}
+@media (max-width: 600px) {
+  .layout{ grid-template-columns:1fr; }
+  .viewer-host canvas{ max-width:100%; height:auto !important; }
+}
